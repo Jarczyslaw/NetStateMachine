@@ -141,7 +141,8 @@ namespace NetStateMachine
                     StateMachine = this,
                     TargetState = targetState
                 };
-                parameter = CurrentState.OnExit(data);
+                CurrentState.OnExit(data);
+                parameter = data.Output;
             }
 
             CurrentState = targetState;
@@ -152,8 +153,9 @@ namespace NetStateMachine
                 {
                     StateMachine = this,
                     SourceState = sourceState,
+                    Input = parameter
                 };
-                CurrentState.OnEnter(data, parameter);
+                CurrentState.OnEnter(data);
             }
         }
 
