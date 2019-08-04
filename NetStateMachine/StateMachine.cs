@@ -132,6 +132,7 @@ namespace NetStateMachine
 
         private void SwitchStates(State targetState, bool invokeEvents = true)
         {
+            object parameter = null;
             var sourceState = CurrentState;
             if (invokeEvents)
             {
@@ -140,7 +141,7 @@ namespace NetStateMachine
                     StateMachine = this,
                     TargetState = targetState
                 };
-                CurrentState.OnExit(data);
+                parameter = CurrentState.OnExit(data);
             }
 
             CurrentState = targetState;
@@ -152,7 +153,7 @@ namespace NetStateMachine
                     StateMachine = this,
                     SourceState = sourceState,
                 };
-                CurrentState.OnEnter(data);
+                CurrentState.OnEnter(data, parameter);
             }
         }
 

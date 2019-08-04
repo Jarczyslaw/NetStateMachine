@@ -6,12 +6,13 @@ namespace NetStateMachine
     {
         public string Name { get; set; }
 
-        public virtual void OnEnter(OnEnterData data)
+        public virtual void OnEnter(OnEnterData data, object parameter)
         {
         }
 
-        public virtual void OnExit(OnExitData data)
+        public virtual object OnExit(OnExitData data)
         {
+            return null;
         }
     }
 }
