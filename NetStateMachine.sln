@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetStateMachine", "NetState
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetStateMachine.Tests", "NetStateMachine.Tests\NetStateMachine.Tests.csproj", "{BF25EFA2-8788-4446-B895-2FFEACE3D59F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetStateMachine.SampleApp", "NetStateMachine.SampleApp\NetStateMachine.SampleApp.csproj", "{F856DB3B-9201-4C4B-B8B5-62E9BFD29157}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{BF25EFA2-8788-4446-B895-2FFEACE3D59F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF25EFA2-8788-4446-B895-2FFEACE3D59F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF25EFA2-8788-4446-B895-2FFEACE3D59F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F856DB3B-9201-4C4B-B8B5-62E9BFD29157}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F856DB3B-9201-4C4B-B8B5-62E9BFD29157}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F856DB3B-9201-4C4B-B8B5-62E9BFD29157}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F856DB3B-9201-4C4B-B8B5-62E9BFD29157}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
