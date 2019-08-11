@@ -83,7 +83,7 @@ namespace NetStateMachine
             return this;
         }
 
-        public void Execute()
+        public void Execute(bool invokeEvents = true)
         {
             var transitions = Transitions.Values.Where(t => t.SourceStateType == CurrentStateType);
             if (!transitions.Any())
@@ -118,7 +118,7 @@ namespace NetStateMachine
                 if (successedTransition != null)
                 {
                     var newState = GetState(successedTransition.TargetStateType);
-                    SwitchStates(newState);
+                    SwitchStates(newState, invokeEvents);
                 }
             }
         }
@@ -130,7 +130,7 @@ namespace NetStateMachine
             SwitchStates(newState, invokeEvents);
         }
 
-        public void SwitchTo<T>()
+        public void SwitchTo<T>(bool invokeEvents = true)
             where T : State
         {
             var transition = Transitions.Values.SingleOrDefault(t => t.SourceStateType == CurrentStateType && t.TargetStateType == typeof(T));
@@ -150,7 +150,7 @@ namespace NetStateMachine
 
                 if (transition.Execute(data))
                 {
-                    SwitchStates(targetState);
+                    SwitchStates(targetState, invokeEvents);
                 }
             }
         }
