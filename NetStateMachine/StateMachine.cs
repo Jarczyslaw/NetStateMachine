@@ -1,5 +1,5 @@
-﻿using NetStateMachine.Exceptions;
-using NetStateMachine.Data;
+﻿using NetStateMachine.Data;
+using NetStateMachine.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +9,11 @@ namespace NetStateMachine
     public class StateMachine
     {
         public Dictionary<Type, State> States { get; } = new Dictionary<Type, State>();
-        public Dictionary<Transition, Func<TransitionData, bool>> Transitions { get; } = new Dictionary<Transition, Func<TransitionData, bool>>();
+        public Dictionary<Type, Transition> Transitions { get; } = new Dictionary<Type, Transition>();
 
         public State CurrentState { get; private set; }
         public string CurrentStateName => CurrentState?.Name;
+        public Type CurrentStateType => CurrentState?.GetType();
 
         public State GetState<T>()
             where T : State
@@ -52,33 +53,36 @@ namespace NetStateMachine
             return this;
         }
 
-        public StateMachine AddTransition<TFrom, TTo>()
-            where TFrom : State
-            where TTo : State
+        private void CheckTransitionState(Type stateType)
         {
-            return AddTransition<TFrom, TTo>(_ => true);
+            if (!States.ContainsKey(stateType))
+            {
+                throw new StateNotExistsException(stateType);
+            }
         }
 
-        public StateMachine AddTransition<TFrom, TTo>(Func<TransitionData, bool> condition)
-            where TFrom : State
-            where TTo : State
+        public StateMachine AddTransition(Transition transition)
         {
-            var newTransition = new Transition(typeof(TFrom), typeof(TTo));
-            if (Transitions.ContainsKey(newTransition))
+            var transitionType = transition.GetType();
+            if (Transitions.ContainsKey(transitionType)
+                || Transitions.Values.Any(t => t.SourceStateType == transition.SourceStateType && t.TargetStateType == transition.TargetStateType))
             {
-                throw new TransitionCurrentlyExistsException(newTransition);
+                throw new TransitionCurrentlyExistsException(transition);
             }
 
-            Transitions.Add(newTransition, condition);
+            CheckTransitionState(transition.SourceStateType);
+            CheckTransitionState(transition.TargetStateType);
+
+            Transitions.Add(transitionType, transition);
             return this;
         }
 
         public void Execute()
         {
-            var transitions = Transitions.Keys.Where(t => t.SourceState == CurrentState.GetType());
+            var transitions = Transitions.Values.Where(t => t.SourceStateType == CurrentStateType);
             if (!transitions.Any())
             {
-                throw new TransitionNotExistsException(CurrentState.GetType());
+                throw new TransitionNotExistsException(CurrentStateType);
             }
             else
             {
@@ -89,10 +93,10 @@ namespace NetStateMachine
                     {
                         StateMachine = this,
                         SourceState = CurrentState,
-                        TargetState = GetState(transition.TargetState)
+                        TargetState = GetState(transition.TargetStateType)
                     };
 
-                    if (Transitions[transition].Invoke(data))
+                    if (transition.Execute(data))
                     {
                         if (successedTransition == null)
                         {
@@ -100,14 +104,14 @@ namespace NetStateMachine
                         }
                         else
                         {
-                            throw new TooManyTransitionsException(CurrentState.GetType());
+                            throw new TooManyTransitionsException(CurrentStateType);
                         }
                     }
                 }
 
                 if (successedTransition != null)
                 {
-                    var newState = GetState(successedTransition.TargetState);
+                    var newState = GetState(successedTransition.TargetStateType);
                     SwitchStates(newState);
                 }
             }
@@ -123,14 +127,14 @@ namespace NetStateMachine
         public void SwitchTo<T>()
             where T : State
         {
-            var transition = Transitions.Keys.SingleOrDefault(t => t.SourceState == CurrentState.GetType() && t.TargetState == typeof(T));
+            var transition = Transitions.Values.SingleOrDefault(t => t.SourceStateType == CurrentStateType && t.TargetStateType == typeof(T));
             if (transition == null)
             {
-                throw new TransitionNotExistsException(CurrentState.GetType(), typeof(T));
+                throw new TransitionNotExistsException(CurrentStateType, typeof(T));
             }
             else
             {
-                var targetState = GetState(transition.TargetState);
+                var targetState = GetState(transition.TargetStateType);
                 var data = new TransitionData
                 {
                     StateMachine = this,
@@ -138,7 +142,7 @@ namespace NetStateMachine
                     TargetState = targetState
                 };
 
-                if (Transitions[transition].Invoke(data))
+                if (transition.Execute(data))
                 {
                     SwitchStates(targetState);
                 }
@@ -177,7 +181,7 @@ namespace NetStateMachine
         public IEnumerable<Transition> GetStateTransitions<T>()
             where T : State
         {
-            return Transitions.Keys.Where(t => t.SourceState == typeof(T));
+            return Transitions.Values.Where(t => t.SourceStateType == typeof(T));
         }
     }
 }

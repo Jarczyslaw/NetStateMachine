@@ -1,36 +1,26 @@
-﻿using System;
+﻿using NetStateMachine.Data;
+using System;
 
 namespace NetStateMachine
 {
-    public class Transition : IEquatable<Transition>
+    public delegate bool OnTransitionExecuteHandler(TransitionData data);
+
+    public abstract class Transition
     {
-        public Type SourceState { get; }
-        public Type TargetState { get; }
+        private OnTransitionExecuteHandler onTransitionExecute;
 
-        public Transition(Type sourceState, Type targetState)
+        public event OnTransitionExecuteHandler OnTransitionExecute
         {
-            SourceState = sourceState;
-            TargetState = targetState;
+            add => onTransitionExecute += value;
+            remove => onTransitionExecute -= value;
         }
 
-        public bool Equals(Transition other)
-        {
-            if (other == null)
-            {
-                return false;
-            }
+        public Type SourceStateType { get; protected set; }
+        public Type TargetStateType { get; protected set; }
 
-            return SourceState == other.SourceState && TargetState == other.TargetState;
-        }
-
-        public override bool Equals(object obj)
+        public virtual bool Execute(TransitionData data)
         {
-            return Equals(obj as Transition);
-        }
-
-        public override int GetHashCode()
-        {
-            return (SourceState, TargetState).GetHashCode();
+            return onTransitionExecute?.Invoke(data) == true;
         }
     }
 }

@@ -5,7 +5,7 @@ namespace NetStateMachine.Exceptions
     public class TransitionCurrentlyExistsException : Exception
     {
         public TransitionCurrentlyExistsException(Transition transition)
-            : this(transition.SourceState, transition.TargetState)
+            : this(transition.SourceStateType, transition.TargetStateType)
         {
         }
 

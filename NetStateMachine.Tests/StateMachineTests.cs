@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NetStateMachine.Exceptions;
 using NetStateMachine.Tests.States;
+using NetStateMachine.Tests.Transitions;
 
 namespace NetStateMachine.Tests
 {
@@ -18,7 +19,7 @@ namespace NetStateMachine.Tests
                 .AddState(new StateC())
                 .AddState(new StateD());
 
-            stateMachine.AddTransition<StateA, StateB>();
+            stateMachine.AddTransition(new AtoB());
         }
 
         [TestMethod]
@@ -45,7 +46,7 @@ namespace NetStateMachine.Tests
         [ExpectedException(typeof(TransitionCurrentlyExistsException))]
         public void AddExistingTransistion()
         {
-            stateMachine.AddTransition<StateA, StateB>();
+            stateMachine.AddTransition(new AtoB());
         }
     }
 }

@@ -57,6 +57,7 @@
     <Compile Include="States\StateC.cs" />
     <Compile Include="States\StateB.cs" />
     <Compile Include="States\StateA.cs" />
+    <Compile Include="Transitions\AtoB.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
