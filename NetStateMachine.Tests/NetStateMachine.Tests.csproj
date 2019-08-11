@@ -52,6 +52,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StateMachineTests.cs" />
     <Compile Include="SampleTests.cs" />
+    <Compile Include="States\StateD.cs" />
+    <Compile Include="States\StateX.cs" />
+    <Compile Include="States\StateC.cs" />
+    <Compile Include="States\StateB.cs" />
     <Compile Include="States\StateA.cs" />
   </ItemGroup>
   <ItemGroup>

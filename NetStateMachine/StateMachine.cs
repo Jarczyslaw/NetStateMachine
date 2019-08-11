@@ -22,14 +22,20 @@ namespace NetStateMachine
 
         public State GetState(Type stateType)
         {
-            if (States.ContainsKey(stateType))
+            if (!States.ContainsKey(stateType))
             {
                 throw new StateNotExistsException(stateType);
             }
             return States[stateType];
         }
 
-        public void AddState<T>(T state)
+        public StateMachine AddState<T>()
+            where T : State, new()
+        {
+            return AddState(new T());
+        }
+
+        public StateMachine AddState<T>(T state)
             where T : State
         {
             var stateType = typeof(T);
@@ -43,9 +49,17 @@ namespace NetStateMachine
             {
                 CurrentState = state;
             }
+            return this;
         }
 
-        public void AddTransition<TFrom, TTo>(Func<TransitionData, bool> condition)
+        public StateMachine AddTransition<TFrom, TTo>()
+            where TFrom : State
+            where TTo : State
+        {
+            return AddTransition<TFrom, TTo>(_ => true);
+        }
+
+        public StateMachine AddTransition<TFrom, TTo>(Func<TransitionData, bool> condition)
             where TFrom : State
             where TTo : State
         {
@@ -56,6 +70,7 @@ namespace NetStateMachine
             }
 
             Transitions.Add(newTransition, condition);
+            return this;
         }
 
         public void Execute()

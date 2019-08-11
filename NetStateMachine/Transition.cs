@@ -15,6 +15,11 @@ namespace NetStateMachine
 
         public bool Equals(Transition other)
         {
+            if (other == null)
+            {
+                return false;
+            }
+
             return SourceState == other.SourceState && TargetState == other.TargetState;
         }
 
