@@ -3,9 +3,8 @@
     public abstract class StatesTransition<TFrom, TTo> : Transition
     {
         protected StatesTransition()
+            : base(typeof(TFrom), typeof(TTo))
         {
-            SourceStateType = typeof(TFrom);
-            TargetStateType = typeof(TTo);
         }
     }
 }
