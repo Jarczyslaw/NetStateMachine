@@ -44,12 +44,12 @@ namespace NetStateMachine
             {
                 throw new StateCurrentlyExistsException(stateType);
             }
-            States.Add(stateType, state);
 
             if (States.Count == 0)
             {
                 CurrentState = state;
             }
+            States.Add(stateType, state);
             return this;
         }
 
@@ -59,6 +59,12 @@ namespace NetStateMachine
             {
                 throw new StateNotExistsException(stateType);
             }
+        }
+
+        public StateMachine AddTransition<T>()
+            where T : Transition, new()
+        {
+            return AddTransition(new T());
         }
 
         public StateMachine AddTransition(Transition transition)

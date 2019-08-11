@@ -20,7 +20,11 @@ namespace NetStateMachine
 
         public virtual bool Execute(TransitionData data)
         {
-            return onTransitionExecute?.Invoke(data) == true;
+            if (onTransitionExecute != null)
+            {
+                return onTransitionExecute.Invoke(data);
+            }
+            return  true;
         }
     }
 }
