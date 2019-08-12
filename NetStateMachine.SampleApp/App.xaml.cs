@@ -1,17 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using NetStateMachine.SampleApp.Views;
+using Prism.Ioc;
+using Prism.Mvvm;
+using Prism.Unity;
+using System.Reflection;
 using System.Windows;
 
 namespace NetStateMachine.SampleApp
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
+    public partial class App : PrismApplication
     {
+        protected override Window CreateShell()
+        {
+            return new MainWindow();
+        }
+
+        protected override void RegisterTypes(IContainerRegistry containerRegistry)
+        {
+            containerRegistry.Register<IStateMachineProvider, StateMachineProvider>();
+        }
+
+        protected override void ConfigureViewModelLocator()
+        {
+            base.ConfigureViewModelLocator();
+            ViewModelLocationProvider.SetDefaultViewTypeToViewModelTypeResolver(viewType =>
+            {
+                var viewModelResolver = new ViewModelResolver();
+                return viewModelResolver.Resolve(Assembly.GetExecutingAssembly(), viewType);
+            });
+        }
     }
 }
