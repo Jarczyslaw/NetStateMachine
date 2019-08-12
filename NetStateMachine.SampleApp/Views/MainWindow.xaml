@@ -27,10 +27,18 @@
             <GroupBox Header="Options">
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Command: " />
-                    <ComboBox Width="150" ItemsSource="{Binding Commands}" />
+                    <ComboBox
+                        Width="150"
+                        DisplayMemberPath="Name"
+                        ItemsSource="{Binding Commands}"
+                        SelectedItem="{Binding SelectedCommand}" />
 
                     <Label Content="State: " />
-                    <ComboBox Width="150" ItemsSource="{Binding States}" />
+                    <ComboBox
+                        Width="150"
+                        DisplayMemberPath="Name"
+                        ItemsSource="{Binding States}"
+                        SelectedItem="{Binding SelectedState}" />
 
                     <Button
                         Width="100"

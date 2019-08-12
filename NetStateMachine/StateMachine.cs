@@ -126,17 +126,27 @@ namespace NetStateMachine
         public void SkipTo<T>(bool invokeEvents = true)
             where T : State
         {
-            var newState = GetState<T>();
+            SkipTo(typeof(T), invokeEvents);
+        }
+
+        public void SkipTo(Type stateType, bool invokeEvents = true)
+        {
+            var newState = GetState(stateType);
             SwitchStates(newState, invokeEvents);
         }
 
         public void SwitchTo<T>(bool invokeEvents = true)
             where T : State
         {
-            var transition = Transitions.Values.SingleOrDefault(t => t.SourceStateType == CurrentStateType && t.TargetStateType == typeof(T));
+            SwitchTo(typeof(T), invokeEvents);
+        }
+
+        public void SwitchTo(Type stateType, bool invokeEvents = true)
+        {
+            var transition = Transitions.Values.SingleOrDefault(t => t.SourceStateType == CurrentStateType && t.TargetStateType == stateType);
             if (transition == null)
             {
-                throw new TransitionNotExistsException(CurrentStateType, typeof(T));
+                throw new TransitionNotExistsException(CurrentStateType, stateType);
             }
             else
             {
