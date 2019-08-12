@@ -93,8 +93,15 @@
     </Compile>
     <Compile Include="IStateMachineProvider.cs" />
     <Compile Include="MessageBoxes.cs" />
+    <Compile Include="MessageBroker.cs" />
     <Compile Include="StateMachineProvider.cs" />
+    <Compile Include="States\BaseState.cs" />
+    <Compile Include="States\StateX.cs" />
+    <Compile Include="States\StateD.cs" />
+    <Compile Include="States\StateC.cs" />
+    <Compile Include="States\StateB.cs" />
     <Compile Include="States\StateA.cs" />
+    <Compile Include="Transistions\AtoB.cs" />
     <Compile Include="ViewModelResolver.cs" />
     <Compile Include="ViewModels\CommandViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
@@ -131,9 +138,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Transistions\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\NetStateMachine\NetStateMachine.csproj">
       <Project>{b59d3212-991b-480e-bab6-345e55df81e2}</Project>

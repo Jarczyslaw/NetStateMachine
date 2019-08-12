@@ -14,9 +14,11 @@ namespace NetStateMachine.SampleApp.ViewModels
         private CommandViewModel selectedCommand;
         private StateViewModel selectedState;
 
-        public MainViewModel(IStateMachineProvider stateMachineProvider)
+        public MainViewModel(IStateMachineProvider stateMachineProvider, MessageBroker messageBroker)
         {
             stateMachine = stateMachineProvider.GetStateMachine();
+            messageBroker.OnSend += AppendStatus;
+
             InitializeStates();
             InitializeCommands();
             UpdateCurrentState();

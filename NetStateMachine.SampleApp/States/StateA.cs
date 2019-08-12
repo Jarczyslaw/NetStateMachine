@@ -1,8 +1,9 @@
 ﻿namespace NetStateMachine.SampleApp.States
 {
-    public class StateA : State
+    public class StateA : BaseState
     {
-        public StateA()
+        public StateA(MessageBroker messageBroker)
+            : base(messageBroker)
         {
             Name = nameof(StateA);
         }

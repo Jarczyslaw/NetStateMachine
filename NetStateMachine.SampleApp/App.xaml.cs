@@ -9,6 +9,15 @@ namespace NetStateMachine.SampleApp
 {
     public partial class App : PrismApplication
     {
+        private readonly MessageBroker messageBroker;
+        private readonly StateMachineProvider stateMachineProvider;
+
+        public App()
+        {
+            messageBroker = new MessageBroker();
+            stateMachineProvider = new StateMachineProvider(messageBroker);
+        }
+
         protected override Window CreateShell()
         {
             return new MainWindow();
@@ -16,7 +25,8 @@ namespace NetStateMachine.SampleApp
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.Register<IStateMachineProvider, StateMachineProvider>();
+            containerRegistry.RegisterInstance<IStateMachineProvider>(stateMachineProvider);
+            containerRegistry.RegisterInstance(messageBroker);
         }
 
         protected override void ConfigureViewModelLocator()
