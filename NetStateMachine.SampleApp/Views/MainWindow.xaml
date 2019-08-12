@@ -15,6 +15,9 @@
         <Style TargetType="GroupBox">
             <Setter Property="Padding" Value="5" />
         </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
     </Window.Resources>
     <Border Padding="5">
         <Grid>

@@ -24,6 +24,15 @@ namespace NetStateMachine.SampleApp.ViewModels
 
         public DelegateCommand ExecuteCommand => executeCommand ?? (executeCommand = new DelegateCommand(() =>
         {
+            try
+            {
+                SelectedCommand.Execute();
+                UpdateCurrentState();
+            }
+            catch (Exception exc)
+            {
+                MessageBoxes.Exception(exc);
+            }
         }));
 
         public ObservableCollection<CommandViewModel> Commands { get; set; }
@@ -89,6 +98,11 @@ namespace NetStateMachine.SampleApp.ViewModels
                 }
             };
             SelectedCommand = Commands.First();
+        }
+
+        private void AppendStatus(string message)
+        {
+            Status += Environment.NewLine + message;
         }
     }
 }

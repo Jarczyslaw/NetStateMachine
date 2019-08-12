@@ -92,6 +92,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IStateMachineProvider.cs" />
+    <Compile Include="MessageBoxes.cs" />
     <Compile Include="StateMachineProvider.cs" />
     <Compile Include="States\StateA.cs" />
     <Compile Include="ViewModelResolver.cs" />
