@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:NetStateMachine.SampleApp"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
-    Title="MainWindow"
+    Title="NetStateMachine.SampleApp"
     Width="800"
     Height="450"
     prism:ViewModelLocator.AutoWireViewModel="True"
