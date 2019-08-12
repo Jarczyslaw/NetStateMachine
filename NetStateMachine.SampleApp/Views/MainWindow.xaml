@@ -15,9 +15,6 @@
         <Style TargetType="GroupBox">
             <Setter Property="Padding" Value="5" />
         </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="VerticalContentAlignment" Value="Center" />
-        </Style>
         <Style TargetType="ComboBox">
             <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
@@ -59,9 +56,11 @@
                 Header="Status">
                 <TextBox
                     AcceptsReturn="True"
+                    HorizontalScrollBarVisibility="Visible"
                     IsReadOnly="True"
                     Text="{Binding Status}"
-                    TextWrapping="Wrap" />
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Visible" />
             </GroupBox>
             <StackPanel
                 Grid.Row="2"
@@ -71,6 +70,7 @@
                 <Label Content="Current state: " />
                 <TextBox
                     Width="150"
+                    VerticalContentAlignment="Center"
                     IsReadOnly="True"
                     Text="{Binding CurrentState, Mode=OneWay}" />
             </StackPanel>

@@ -104,7 +104,11 @@ namespace NetStateMachine.SampleApp.ViewModels
 
         private void AppendStatus(string message)
         {
-            Status += Environment.NewLine + message;
+            if (!string.IsNullOrEmpty(Status))
+            {
+                Status += Environment.NewLine;
+            }
+            Status += message;
         }
     }
 }
