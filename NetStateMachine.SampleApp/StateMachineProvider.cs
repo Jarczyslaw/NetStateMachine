@@ -6,9 +6,9 @@ namespace NetStateMachine.SampleApp
 {
     public class StateMachineProvider : IStateMachineProvider
     {
-        private readonly MessageBroker messageBroker;
+        private readonly IMessageBroker messageBroker;
 
-        public StateMachineProvider(MessageBroker messageBroker)
+        public StateMachineProvider(IMessageBroker messageBroker)
         {
             this.messageBroker = messageBroker;
         }
@@ -23,7 +23,7 @@ namespace NetStateMachine.SampleApp
                 .AddState(new StateD(messageBroker))
                 .AddState(new StateX(messageBroker));
 
-            stateMachine.AddTransition<AtoB>();
+            stateMachine.AddTransition(new AtoB(messageBroker));
 
             return stateMachine;
         }

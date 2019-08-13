@@ -16,9 +16,12 @@ namespace NetStateMachine.SampleApp.ViewModels
         private readonly StateMachine stateMachine;
         private CommandViewModel selectedCommand;
         private StateViewModel selectedState;
+        private readonly IDialogs dialogs;
 
-        public MainViewModel(IStateMachineProvider stateMachineProvider, MessageBroker messageBroker)
+        public MainViewModel(IStateMachineProvider stateMachineProvider, IMessageBroker messageBroker, IDialogs dialogs)
         {
+            this.dialogs = dialogs;
+
             stateMachine = stateMachineProvider.GetStateMachine();
             messageBroker.OnSend += AppendStatus;
 
@@ -50,7 +53,7 @@ namespace NetStateMachine.SampleApp.ViewModels
 
         public DelegateCommand ClearCommand => clearCommand ?? (clearCommand = new DelegateCommand(() =>
         {
-            if (MessageBoxes.YesNoQuestion("Do you really want to perform status clear?"))
+            if (dialogs.YesNoQuestion("Do you really want to perform status clear?"))
             {
                 Status = string.Empty;
             }
@@ -65,7 +68,7 @@ namespace NetStateMachine.SampleApp.ViewModels
             }
             catch (Exception exc)
             {
-                MessageBoxes.Exception(exc);
+                dialogs.Exception(exc);
             }
         }));
 

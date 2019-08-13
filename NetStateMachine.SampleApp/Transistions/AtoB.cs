@@ -2,7 +2,10 @@
 
 namespace NetStateMachine.SampleApp.Transistions
 {
-    public class AtoB : StatesTransition<StateA, StateB>
+    public class AtoB : BaseTransition<StateA, StateB>
     {
+        public AtoB(IMessageBroker messageBroker) : base(messageBroker)
+        {
+        }
     }
 }

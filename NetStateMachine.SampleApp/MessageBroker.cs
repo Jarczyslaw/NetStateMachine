@@ -2,9 +2,9 @@
 
 namespace NetStateMachine.SampleApp
 {
-    public class MessageBroker
+    public class MessageBroker : IMessageBroker
     {
-        public Action<string> OnSend;
+        public Action<string> OnSend { get; set; }
 
         public void SendMessage(string message)
         {

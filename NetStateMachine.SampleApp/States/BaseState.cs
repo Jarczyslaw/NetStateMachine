@@ -4,9 +4,9 @@ namespace NetStateMachine.SampleApp.States
 {
     public class BaseState : State
     {
-        private readonly MessageBroker messageBroker;
+        private readonly IMessageBroker messageBroker;
 
-        public BaseState(MessageBroker messageBroker)
+        public BaseState(IMessageBroker messageBroker)
         {
             this.messageBroker = messageBroker;
         }

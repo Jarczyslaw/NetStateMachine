@@ -2,7 +2,7 @@
 {
     public class StateA : BaseState
     {
-        public StateA(MessageBroker messageBroker)
+        public StateA(IMessageBroker messageBroker)
             : base(messageBroker)
         {
             Name = nameof(StateA);
