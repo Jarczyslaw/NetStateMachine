@@ -14,5 +14,10 @@ namespace NetStateMachine.SampleApp
         {
             MessageBox.Show(message, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+
+        public static bool YesNoQuestion(string question)
+        {
+            return MessageBox.Show(question, "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes;
+        }
     }
 }

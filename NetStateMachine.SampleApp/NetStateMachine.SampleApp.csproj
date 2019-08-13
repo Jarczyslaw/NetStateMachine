@@ -91,6 +91,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controls\StatusTextBox.cs" />
     <Compile Include="IStateMachineProvider.cs" />
     <Compile Include="MessageBoxes.cs" />
     <Compile Include="MessageBroker.cs" />

@@ -3,6 +3,7 @@ using Prism.Mvvm;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 
 namespace NetStateMachine.SampleApp.ViewModels
 {
@@ -10,6 +11,8 @@ namespace NetStateMachine.SampleApp.ViewModels
     {
         private string status;
         private DelegateCommand executeCommand;
+        private DelegateCommand infoCommand;
+        private DelegateCommand clearCommand;
         private readonly StateMachine stateMachine;
         private CommandViewModel selectedCommand;
         private StateViewModel selectedState;
@@ -23,6 +26,35 @@ namespace NetStateMachine.SampleApp.ViewModels
             InitializeCommands();
             UpdateCurrentState();
         }
+
+        public DelegateCommand InfoCommand => infoCommand ?? (infoCommand = new DelegateCommand(() =>
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("State machine summary");
+            sb.AppendLine($"States ({stateMachine.States.Count}):");
+            foreach (var pair in stateMachine.States)
+            {
+                sb.Append('\t')
+                    .AppendLine(pair.Value.Name);
+            }
+            sb.AppendLine($"Transistions ({stateMachine.Transitions.Count}):");
+            foreach (var pair in stateMachine.Transitions)
+            {
+                var trans = pair.Value;
+                sb.Append('\t')
+                    .AppendLine($"{trans.GetType().Name} - from: {trans.SourceStateType.Name} to: {trans.TargetStateType.Name}");
+            }
+
+            Status += Environment.NewLine + sb.ToString() + Environment.NewLine;
+        }));
+
+        public DelegateCommand ClearCommand => clearCommand ?? (clearCommand = new DelegateCommand(() =>
+        {
+            if (MessageBoxes.YesNoQuestion("Do you really want to perform status clear?"))
+            {
+                Status = string.Empty;
+            }
+        }));
 
         public DelegateCommand ExecuteCommand => executeCommand ?? (executeCommand = new DelegateCommand(() =>
         {
@@ -104,11 +136,7 @@ namespace NetStateMachine.SampleApp.ViewModels
 
         private void AppendStatus(string message)
         {
-            if (!string.IsNullOrEmpty(Status))
-            {
-                Status += Environment.NewLine;
-            }
-            Status += message;
+            Status += message + Environment.NewLine;
         }
     }
 }
