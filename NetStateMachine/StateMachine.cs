@@ -99,7 +99,7 @@ namespace NetStateMachine
             {
                 CurrentState.OnTryExit(tryExitData);
             }
-            
+
             var data = new TransitionData
             {
                 StateMachine = this,
@@ -210,10 +210,20 @@ namespace NetStateMachine
             }
         }
 
+        public IEnumerable<Transition> GetStateTransitions(State state)
+        {
+            return GetStateTransitions(state.GetType());
+        }
+
+        public IEnumerable<Transition> GetStateTransitions(Type stateType)
+        {
+            return Transitions.Values.Where(t => t.SourceStateType == stateType);
+        }
+
         public IEnumerable<Transition> GetStateTransitions<T>()
             where T : State
         {
-            return Transitions.Values.Where(t => t.SourceStateType == typeof(T));
+            return GetStateTransitions(typeof(T));
         }
     }
 }

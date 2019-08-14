@@ -36,19 +36,24 @@ namespace NetStateMachine.SampleApp.ViewModels
             var sb = new StringBuilder();
             sb.AppendLine("State machine summary");
             sb.AppendLine($"States ({stateMachine.States.Count}):");
-            foreach (var pair in stateMachine.States)
+            foreach (var statePair in stateMachine.States)
             {
                 sb.Append('\t')
-                    .AppendLine(pair.Value.Name);
-            }
-            sb.AppendLine($"Transistions ({stateMachine.Transitions.Count}):");
-            foreach (var pair in stateMachine.Transitions)
-            {
-                var trans = pair.Value;
-                sb.Append('\t')
-                    .AppendLine($"{trans.GetType().Name} - from: {trans.SourceStateType.Name} to: {trans.TargetStateType.Name}");
-            }
+                    .AppendLine(statePair.Value.Name);
 
+                var transitions = stateMachine.GetStateTransitions(statePair.Value);
+                if (!transitions.Any())
+                {
+                    continue;
+                }
+
+                foreach (var transition in transitions)
+                {
+                    sb.Append("\t\t")
+                        .AppendLine($"{transition.GetType().Name} to: {transition.TargetStateType.Name}");
+                }
+            }
+            sb.AppendLine($"Transitions count: {stateMachine.Transitions.Count}");
             Status += Environment.NewLine + sb.ToString() + Environment.NewLine;
         }));
 
