@@ -23,11 +23,14 @@ namespace NetStateMachine
 
         public State GetState(Type stateType)
         {
-            if (!States.ContainsKey(stateType))
+            if (States.TryGetValue(stateType, out State state))
+            {
+                return state;
+            }
+            else
             {
                 throw new StateNotExistsException(stateType);
             }
-            return States[stateType];
         }
 
         public StateMachine AddState<T>()
@@ -83,6 +86,31 @@ namespace NetStateMachine
             return this;
         }
 
+        private bool PerformExecute(Transition transition, bool callOnTryExit)
+        {
+            var targetState = GetState(transition.TargetStateType);
+            var tryExitData = new OnTryExitData
+            {
+                StateMachine = this,
+                TargetState = targetState
+            };
+
+            if (callOnTryExit)
+            {
+                CurrentState.OnTryExit(tryExitData);
+            }
+            
+            var data = new TransitionData
+            {
+                StateMachine = this,
+                SourceState = CurrentState,
+                TargetState = GetState(transition.TargetStateType),
+                TransitionArgument = tryExitData.TransitionArgument
+            };
+
+            return transition.Execute(data);
+        }
+
         public void Execute(bool invokeEvents = true)
         {
             var transitions = Transitions.Values.Where(t => t.SourceStateType == CurrentStateType);
@@ -95,14 +123,8 @@ namespace NetStateMachine
                 Transition successedTransition = null;
                 foreach (var transition in transitions)
                 {
-                    var data = new TransitionData
-                    {
-                        StateMachine = this,
-                        SourceState = CurrentState,
-                        TargetState = GetState(transition.TargetStateType)
-                    };
-
-                    if (transition.Execute(data))
+                    var success = PerformExecute(transition, transition == transitions.First());
+                    if (success)
                     {
                         if (successedTransition == null)
                         {
@@ -150,16 +172,10 @@ namespace NetStateMachine
             }
             else
             {
-                var targetState = GetState(transition.TargetStateType);
-                var data = new TransitionData
+                var success = PerformExecute(transition, true);
+                if (success)
                 {
-                    StateMachine = this,
-                    SourceState = CurrentState,
-                    TargetState = targetState
-                };
-
-                if (transition.Execute(data))
-                {
+                    var targetState = GetState(transition.TargetStateType);
                     SwitchStates(targetState, invokeEvents);
                 }
             }

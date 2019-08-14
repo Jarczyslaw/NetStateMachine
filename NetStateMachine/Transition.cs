@@ -41,7 +41,7 @@ namespace NetStateMachine
             {
                 return onTransitionExecute.Invoke(data);
             }
-            return  true;
+            return true;
         }
     }
 }

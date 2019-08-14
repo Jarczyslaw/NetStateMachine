@@ -17,6 +17,7 @@ namespace NetStateMachine.SampleApp.ViewModels
         private CommandViewModel selectedCommand;
         private StateViewModel selectedState;
         private readonly IDialogs dialogs;
+        private bool fireEvents = true;
 
         public MainViewModel(IStateMachineProvider stateMachineProvider, IMessageBroker messageBroker, IDialogs dialogs)
         {
@@ -72,6 +73,12 @@ namespace NetStateMachine.SampleApp.ViewModels
             }
         }));
 
+        public bool FireEvents
+        {
+            get => fireEvents;
+            set => SetProperty(ref fireEvents, value);
+        }
+
         public ObservableCollection<CommandViewModel> Commands { get; set; }
 
         public CommandViewModel SelectedCommand
@@ -121,17 +128,17 @@ namespace NetStateMachine.SampleApp.ViewModels
                 new CommandViewModel
                 {
                     Name = "Execute",
-                    Command = () => stateMachine.Execute()
+                    Command = () => stateMachine.Execute(FireEvents)
                 },
                 new CommandViewModel
                 {
                     Name = "SwitchTo",
-                    Command = () => stateMachine.SwitchTo(SelectedState.StateType)
+                    Command = () => stateMachine.SwitchTo(SelectedState.StateType, FireEvents)
                 },
                 new CommandViewModel
                 {
                     Name = "SkipTo",
-                    Command = () => stateMachine.SkipTo(SelectedState.StateType)
+                    Command = () => stateMachine.SkipTo(SelectedState.StateType, FireEvents)
                 }
             };
             SelectedCommand = Commands.First();

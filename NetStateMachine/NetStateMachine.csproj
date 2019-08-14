@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Data\EventData.cs" />
     <Compile Include="Data\OnEnterData.cs" />
+    <Compile Include="Data\OnTryExitData.cs" />
     <Compile Include="Data\OnExitData.cs" />
     <Compile Include="Data\TransitionData.cs" />
     <Compile Include="Exceptions\StateNotExistsException.cs" />

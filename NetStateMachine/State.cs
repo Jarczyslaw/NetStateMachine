@@ -6,9 +6,13 @@ namespace NetStateMachine
 
     public delegate void OnStateExitHandler(OnExitData data);
 
+    public delegate object OnStateTryExitHandler(OnTryExitData data);
+
     public abstract class State
     {
         private OnStateEnterHandler onStateEnter;
+        private OnStateTryExitHandler onStateTryExit;
+        private OnStateExitHandler onStateExit;
 
         public event OnStateEnterHandler OnStateEnter
         {
@@ -16,7 +20,11 @@ namespace NetStateMachine
             remove => onStateEnter -= value;
         }
 
-        private OnStateExitHandler onStateExit;
+        public event OnStateTryExitHandler OnStateTryExit
+        {
+            add => onStateTryExit += value;
+            remove => onStateTryExit -= value;
+        }
 
         public event OnStateExitHandler OnStateExit
         {
@@ -29,6 +37,11 @@ namespace NetStateMachine
         public virtual void OnEnter(OnEnterData data)
         {
             onStateEnter?.Invoke(data);
+        }
+
+        public virtual void OnTryExit(OnTryExitData data)
+        {
+            onStateTryExit?.Invoke(data);
         }
 
         public virtual void OnExit(OnExitData data)

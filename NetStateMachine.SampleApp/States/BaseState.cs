@@ -16,6 +16,11 @@ namespace NetStateMachine.SampleApp.States
             messageBroker.SendMessage($"Entering state: {Name}");
         }
 
+        public override void OnTryExit(OnTryExitData data)
+        {
+            messageBroker.SendMessage($"Trying to exit state: {Name}");
+        }
+
         public override void OnExit(OnExitData data)
         {
             messageBroker.SendMessage($"Exiting state: {Name}");

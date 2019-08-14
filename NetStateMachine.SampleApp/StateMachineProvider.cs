@@ -23,7 +23,14 @@ namespace NetStateMachine.SampleApp
                 .AddState(new StateD(messageBroker))
                 .AddState(new StateX(messageBroker));
 
-            stateMachine.AddTransition(new AtoB(messageBroker));
+            stateMachine.AddTransition(new AtoB(messageBroker))
+                .AddTransition(new AtoC(messageBroker))
+                .AddTransition(new BtoC(messageBroker))
+                .AddTransition(new BtoD(messageBroker))
+                .AddTransition(new BtoB(messageBroker))
+                .AddTransition(new CtoD(messageBroker))
+                .AddTransition(new DtoX(messageBroker))
+                .AddTransition(new CtoA(messageBroker));
 
             return stateMachine;
         }

@@ -104,6 +104,13 @@
     <Compile Include="States\StateC.cs" />
     <Compile Include="States\StateB.cs" />
     <Compile Include="States\StateA.cs" />
+    <Compile Include="Transistions\BtoD.cs" />
+    <Compile Include="Transistions\CtoA.cs" />
+    <Compile Include="Transistions\BtoB.cs" />
+    <Compile Include="Transistions\CtoD.cs" />
+    <Compile Include="Transistions\DtoX.cs" />
+    <Compile Include="Transistions\BtoC.cs" />
+    <Compile Include="Transistions\AtoC.cs" />
     <Compile Include="Transistions\AtoB.cs" />
     <Compile Include="Transistions\BaseTransition.cs" />
     <Compile Include="ViewModelResolver.cs" />

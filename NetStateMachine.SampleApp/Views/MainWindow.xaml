@@ -43,6 +43,12 @@
                         ItemsSource="{Binding States}"
                         SelectedItem="{Binding SelectedState}" />
 
+                    <CheckBox
+                        Margin="10,0,0,0"
+                        VerticalContentAlignment="Center"
+                        Content="Fire events"
+                        IsChecked="{Binding FireEvents}" />
+
                     <Button
                         Width="100"
                         Margin="10,0,0,0"
