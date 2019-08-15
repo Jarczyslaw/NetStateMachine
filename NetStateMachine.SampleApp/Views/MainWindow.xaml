@@ -57,21 +57,19 @@
                     <Button
                         Width="100"
                         Margin="10,0,0,0"
-                        Command="{Binding InfoCommand}"
-                        Content="Info" />
-                    <Button
-                        Width="100"
-                        Margin="10,0,0,0"
                         Command="{Binding ClearCommand}"
                         Content="Clear" />
                 </StackPanel>
             </GroupBox>
-            <GroupBox
-                Grid.Row="1"
-                Margin="0,5,0,0"
-                Header="Status">
-                <controls:StatusTextBox Text="{Binding Status}" />
-            </GroupBox>
+            <UniformGrid Grid.Row="1" Columns="2">
+                <GroupBox Margin="0,5,0,0" Header="Messages">
+                    <controls:StatusTextBox Text="{Binding Messages}" />
+                </GroupBox>
+                <GroupBox Margin="0,5,0,0" Header="Status">
+                    <controls:StatusTextBox Text="{Binding Status}" />
+                </GroupBox>
+            </UniformGrid>
+
             <StackPanel
                 Grid.Row="2"
                 Margin="10"

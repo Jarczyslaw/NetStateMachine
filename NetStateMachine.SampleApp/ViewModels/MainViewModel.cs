@@ -10,8 +10,8 @@ namespace NetStateMachine.SampleApp.ViewModels
     public class MainViewModel : BindableBase
     {
         private string status;
+        private string messages;
         private DelegateCommand executeCommand;
-        private DelegateCommand infoCommand;
         private DelegateCommand clearCommand;
         private readonly StateMachine stateMachine;
         private CommandViewModel selectedCommand;
@@ -24,44 +24,19 @@ namespace NetStateMachine.SampleApp.ViewModels
             this.dialogs = dialogs;
 
             stateMachine = stateMachineProvider.GetStateMachine();
-            messageBroker.OnSend += AppendStatus;
+            messageBroker.OnSend += AppendMessage;
 
             InitializeStates();
             InitializeCommands();
             UpdateCurrentState();
+            SetStateMachineInfo();
         }
-
-        public DelegateCommand InfoCommand => infoCommand ?? (infoCommand = new DelegateCommand(() =>
-        {
-            var sb = new StringBuilder();
-            sb.AppendLine("State machine summary");
-            sb.AppendLine($"States ({stateMachine.States.Count}):");
-            foreach (var statePair in stateMachine.States)
-            {
-                sb.Append('\t')
-                    .AppendLine(statePair.Value.Name);
-
-                var transitions = stateMachine.GetStateTransitions(statePair.Value);
-                if (!transitions.Any())
-                {
-                    continue;
-                }
-
-                foreach (var transition in transitions)
-                {
-                    sb.Append("\t\t")
-                        .AppendLine($"{transition.GetType().Name} to: {transition.TargetStateType.Name}");
-                }
-            }
-            sb.AppendLine($"Transitions count: {stateMachine.Transitions.Count}");
-            Status += Environment.NewLine + sb.ToString() + Environment.NewLine;
-        }));
 
         public DelegateCommand ClearCommand => clearCommand ?? (clearCommand = new DelegateCommand(() =>
         {
             if (dialogs.YesNoQuestion("Do you really want to perform status clear?"))
             {
-                Status = string.Empty;
+                Messages = string.Empty;
             }
         }));
 
@@ -104,6 +79,12 @@ namespace NetStateMachine.SampleApp.ViewModels
         {
             get => status;
             set => SetProperty(ref status, value);
+        }
+
+        public string Messages
+        {
+            get => messages;
+            set => SetProperty(ref messages, value);
         }
 
         public string CurrentState
@@ -149,9 +130,37 @@ namespace NetStateMachine.SampleApp.ViewModels
             SelectedCommand = Commands.First();
         }
 
-        private void AppendStatus(string message)
+        private void AppendMessage(string message)
         {
-            Status += message + Environment.NewLine;
+            Messages += message + Environment.NewLine;
+        }
+
+        private void SetStateMachineInfo()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("State machine summary");
+            sb.AppendLine($"States ({stateMachine.States.Count}):");
+            foreach (var statePair in stateMachine.States)
+            {
+                sb.Append($"\t{statePair.Value.Name}");
+
+                var transitions = stateMachine.GetStateTransitions(statePair.Value);
+                if (transitions.Any())
+                {
+                    sb.AppendLine($" - transitions ({transitions.Count()}):");
+                    foreach (var transition in transitions)
+                    {
+                        sb.Append("\t\t")
+                            .AppendLine($"{transition.GetType().Name} to: {transition.TargetStateType.Name}");
+                    }
+                }
+                else
+                {
+                    sb.AppendLine();
+                }
+            }
+            sb.AppendLine($"Transitions count: {stateMachine.Transitions.Count}");
+            Status += sb.ToString();
         }
     }
 }
