@@ -1,38 +1,55 @@
 ﻿using NetStateMachine.SampleApp.States;
 using NetStateMachine.SampleApp.Transistions;
+using Prism.Ioc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Unity;
 
 namespace NetStateMachine.SampleApp
 {
     public class StateMachineProvider : IStateMachineProvider
     {
-        private readonly IMessageBroker messageBroker;
+        private readonly IUnityContainer container;
 
-        public StateMachineProvider(IMessageBroker messageBroker)
+        public StateMachineProvider(IUnityContainer container)
         {
-            this.messageBroker = messageBroker;
+            this.container = container;
         }
 
         public StateMachine GetStateMachine()
         {
             var stateMachine = new StateMachine();
 
-            stateMachine.AddState(new StateA(messageBroker))
-                .AddState(new StateB(messageBroker))
-                .AddState(new StateC(messageBroker))
-                .AddState(new StateD(messageBroker))
-                .AddState(new StateX(messageBroker));
+            foreach (var stateType in GetAllStates())
+            {
+                stateMachine.AddState(stateType, (State)container.Resolve(stateType));
+            }
 
-            stateMachine.AddTransition(new AtoB(messageBroker))
-                .AddTransition(new AtoC(messageBroker))
-                .AddTransition(new BtoC(messageBroker))
-                .AddTransition(new BtoD(messageBroker))
-                .AddTransition(new BtoB(messageBroker))
-                .AddTransition(new CtoD(messageBroker))
-                .AddTransition(new DtoX(messageBroker))
-                .AddTransition(new CtoA(messageBroker));
+            foreach (var transitionType in GetAllTransitions())
+            {
+                stateMachine.AddTransition(transitionType, (Transition)container.Resolve(transitionType));
+            }
 
             return stateMachine;
+        }
+
+        private List<Type> GetAllStates()
+        {
+            return Assembly.GetExecutingAssembly()
+               .GetTypes()
+               .Where(t => t.IsSubclassOf(typeof(BaseState)))
+               .OrderBy(t => t.Name)
+               .ToList();
+        }
+
+        private List<Type> GetAllTransitions()
+        {
+            var tType = typeof(IAppTransition);
+            return Assembly.GetExecutingAssembly().GetTypes()
+                .Where(t => tType.IsAssignableFrom(t) && !t.IsInterface)
+                .ToList();
         }
     }
 }

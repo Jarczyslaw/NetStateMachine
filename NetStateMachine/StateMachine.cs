@@ -43,7 +43,11 @@ namespace NetStateMachine
         public StateMachine AddState<T>(T state)
             where T : State
         {
-            var stateType = typeof(T);
+            return AddState(typeof(T), state);
+        }
+
+        public StateMachine AddState(Type stateType, State stateInstance)
+        {
             if (States.ContainsKey(stateType))
             {
                 throw new StateCurrentlyExistsException(stateType);
@@ -51,10 +55,10 @@ namespace NetStateMachine
 
             if (States.Count == 0)
             {
-                CurrentState = state;
-                InitialState = state;
+                CurrentState = stateInstance;
+                InitialState = stateInstance;
             }
-            States.Add(stateType, state);
+            States.Add(stateType, stateInstance);
             return this;
         }
 
@@ -72,19 +76,24 @@ namespace NetStateMachine
             return AddTransition(new T());
         }
 
-        public StateMachine AddTransition(Transition transition)
+        public StateMachine AddTransition<T>(T transition)
+            where T : Transition
         {
-            var transitionType = transition.GetType();
+            return AddTransition(typeof(T), transition);
+        }
+
+        public StateMachine AddTransition(Type transitionType, Transition transitionInstance)
+        {
             if (Transitions.ContainsKey(transitionType)
-                || Transitions.Values.Any(t => t.SourceStateType == transition.SourceStateType && t.TargetStateType == transition.TargetStateType))
+                || Transitions.Values.Any(t => t.SourceStateType == transitionInstance.SourceStateType && t.TargetStateType == transitionInstance.TargetStateType))
             {
-                throw new TransitionCurrentlyExistsException(transition);
+                throw new TransitionCurrentlyExistsException(transitionInstance);
             }
 
-            CheckTransitionState(transition.SourceStateType);
-            CheckTransitionState(transition.TargetStateType);
+            CheckTransitionState(transitionInstance.SourceStateType);
+            CheckTransitionState(transitionInstance.TargetStateType);
 
-            Transitions.Add(transitionType, transition);
+            Transitions.Add(transitionType, transitionInstance);
             return this;
         }
 

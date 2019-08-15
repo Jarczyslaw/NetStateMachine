@@ -108,11 +108,13 @@
     <Compile Include="Transistions\CtoA.cs" />
     <Compile Include="Transistions\BtoB.cs" />
     <Compile Include="Transistions\CtoD.cs" />
+    <Compile Include="Transistions\DtoA.cs" />
     <Compile Include="Transistions\DtoX.cs" />
     <Compile Include="Transistions\BtoC.cs" />
     <Compile Include="Transistions\AtoC.cs" />
     <Compile Include="Transistions\AtoB.cs" />
     <Compile Include="Transistions\BaseTransition.cs" />
+    <Compile Include="Transistions\IAppTransition.cs" />
     <Compile Include="ViewModelResolver.cs" />
     <Compile Include="ViewModels\CommandViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
