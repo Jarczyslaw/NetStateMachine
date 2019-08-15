@@ -12,6 +12,7 @@ namespace NetStateMachine
         public Dictionary<Type, Transition> Transitions { get; } = new Dictionary<Type, Transition>();
 
         public State CurrentState { get; private set; }
+        public State InitialState { get; private set; }
         public string CurrentStateName => CurrentState?.Name;
         public Type CurrentStateType => CurrentState?.GetType();
 
@@ -51,6 +52,7 @@ namespace NetStateMachine
             if (States.Count == 0)
             {
                 CurrentState = state;
+                InitialState = state;
             }
             States.Add(stateType, state);
             return this;
@@ -123,7 +125,7 @@ namespace NetStateMachine
                 Transition successedTransition = null;
                 foreach (var transition in transitions)
                 {
-                    var success = PerformExecute(transition, transition == transitions.First());
+                    var success = PerformExecute(transition, invokeEvents && transition == transitions.First());
                     if (success)
                     {
                         if (successedTransition == null)
@@ -172,7 +174,7 @@ namespace NetStateMachine
             }
             else
             {
-                var success = PerformExecute(transition, true);
+                var success = PerformExecute(transition, invokeEvents);
                 if (success)
                 {
                     var targetState = GetState(transition.TargetStateType);
@@ -224,6 +226,11 @@ namespace NetStateMachine
             where T : State
         {
             return GetStateTransitions(typeof(T));
+        }
+
+        public void Reset()
+        {
+            SkipTo(InitialState.GetType(), false);
         }
     }
 }
