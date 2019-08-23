@@ -4,7 +4,7 @@ namespace NetStateMachine
 {
     public delegate void OnStateEnterHandler(OnEnterData data);
 
-    public delegate void OnStateExitHandler(OnExitData data);
+    public delegate object OnStateExitHandler(OnExitData data);
 
     public delegate object OnStateTryExitHandler(OnTryExitData data);
 
@@ -41,12 +41,18 @@ namespace NetStateMachine
 
         public virtual void OnTryExit(OnTryExitData data)
         {
-            onStateTryExit?.Invoke(data);
+            if (onStateTryExit != null)
+            {
+                data.TransitionArgument = onStateTryExit.Invoke(data);
+            }
         }
 
         public virtual void OnExit(OnExitData data)
         {
-            onStateExit?.Invoke(data);
+            if (onStateExit != null)
+            {
+                data.Output = onStateExit.Invoke(data);
+            }
         }
     }
 }
